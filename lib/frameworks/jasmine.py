@@ -1,6 +1,6 @@
 # coding: utf-8
 
-import json, retrying, urllib, sys
+import json, retrying, urllib.parse, sys
 from selenium.webdriver.support.ui import WebDriverWait
 from itertools import groupby
 from xml.etree import ElementTree
@@ -53,7 +53,7 @@ def runTestsInPoolDrivers( drivers, tests, retries, timeout, enableTestLogs ):
 def runTestByDriversPool( driversPool, test, counter, retries, timeout, enableTestLogs ):
 
     driver = driversPool.pop()
-    test_url = "%s?spec=%s" % ( driver["testsUrl"], urllib.quote( test ) )
+    test_url = "%s?spec=%s" % ( driver["testsUrl"], urllib.parse.quote( test ) )
     log.writeln( "Running test %d in session %s: %s" % ( counter, driver['driver'].session_id, test ) )
     passed = False
     testResult = None
@@ -102,7 +102,7 @@ def runTests( driver, url, timeout ):
 
             try:
 
-                testResult = runTest( driver, "%s?spec=%s" % ( url, urllib.quote( test ) ), timeout )
+                testResult = runTest( driver, "%s?spec=%s" % ( url, urllib.parse.quote( test ) ), timeout )
 
                 if isPassed( testResult[ "json" ] ):
                     passed = True
